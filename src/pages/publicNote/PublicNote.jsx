@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import "./PublicNote.css";
+import "./publicNote.css";
 
 function PublicNote() {
   const { id } = useParams();
