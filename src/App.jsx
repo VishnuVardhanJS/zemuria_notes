@@ -1,7 +1,7 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import Login from './pages/login/login'
-import Home from './pages/home/home'
+import Login from './pages/login/Login'
+import Home from './pages/home/Home'
 import PublicNote from './pages/publicNote/PublicNote'
 
 function App() {
