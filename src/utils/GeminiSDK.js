@@ -27,7 +27,7 @@ export const generateContent = async (input) => {
 
 
 export const summarizeContent = async (input) => {
-    const prompt = input + "\n\n" + "Summarize this as short as possible";
+    const prompt = input + "\n\n" + "Summarize this as short as possible if it is already short enough give the same text back";
 
     const result = await generateContent(prompt);
 
@@ -35,7 +35,7 @@ export const summarizeContent = async (input) => {
 }
 
 export const grammarCorrection = async (input) => {
-    const prompt = input + "\n\n" + "Fix Grammar in this";
+    const prompt = input + "\n\n" + "Fix Grammar in this and if the grammar is correct return the input text itself DO NOT GIVE THE GRAMMAR IS ALREADY CORRECT";
 
     const result = await generateContent(prompt);
 
