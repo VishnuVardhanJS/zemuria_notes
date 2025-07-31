@@ -11,14 +11,19 @@ import {
   doc,
   getDoc,
   deleteDoc,
+  query,
+  orderBy
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { decryptData } from "../../utils/Encryption";
 
 function Home() {
   const [userId, setUserId] = useState(null);
   const [notes, setNotes] = useState([]);
   const [showNote, setShowNote] = useState(false);
   const [currentNote, setCurrentNote] = useState(null);
+  const [sortBy, setSortBy] = useState("none")
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -29,6 +34,46 @@ function Home() {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (sortBy !== "none") {
+      fetchSortedNotes(userId, sortBy)
+    }
+  }, [sortBy])
+
+  const fetchSortedNotes = async (uid, sort) => {
+    const notesRef = collection(db, "users", uid, "notes");
+    const q = query(notesRef, orderBy(sort, "desc"));
+    const snapshot = await getDocs(q);
+
+    const notesList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const sortedNotes = notesList.sort((a, b) => {
+      const first = decryptData(a.title, import.meta.env.VITE_AES_ENCRYPTION_KEY)
+      const second = decryptData(b.title, import.meta.env.VITE_AES_ENCRYPTION_KEY)
+      if (first < second) return -1;
+      if (first > second) return 1;
+      return 0;
+    });
+
+    setNotes(sortedNotes);
+  }
+
+  const fetchSearchNotes = async (e) => {
+    e.preventDefault();
+    const querySnapshot = await getDocs(collection(db, "users", userId, "notes"));
+
+    const results = querySnapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((note) =>
+        decryptData(note.title, import.meta.env.VITE_AES_ENCRYPTION_KEY).includes(searchTerm)
+      );
+    setNotes(results)
+
+  }
 
 
   const fetchNotes = async (uid) => {
@@ -79,30 +124,56 @@ function Home() {
     }
   };
 
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    setSortBy(value);
+  };
+
   return (
     <div className="home-container">
+      <Header />
       <div className="notes-container">
-        <Header />
-        <button className="add-note-button" onClick={addNote}>Add Note</button>
-
+        <div className="note-option-cont">
+          <button className="add-note-button" onClick={addNote}>Add Note</button>
+          <div className="search-cont">
+            <form onSubmit={fetchSearchNotes} className="search-form">
+              <input
+                type="text"
+                placeholder="Search item..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <button type="submit" className="search-button">
+                Search
+              </button>
+            </form>
+          </div>
+          <div className="sort-cont">
+            <select className="sort-select" id="sort-select" value={sortBy} onChange={handleSortChange}>
+              <option value="none">None</option>
+              <option value="updatedAt">Date</option>
+              <option value="title">Title</option>
+            </select>
+          </div>
+        </div>
         <div className="notes">
           {notes.map((note) => (
             <NoteItem
               key={note.id}
-              title={note.title}
+              title={decryptData(note.title, import.meta.env.VITE_AES_ENCRYPTION_KEY)}
               onDelete={() => handleDelete(note.id)}
               onClick={() => openNote(note.id)}
             />
           ))}
         </div>
       </div>
-
       {showNote && currentNote && (
         <Note
           setShowNote={setShowNote}
           uuid={currentNote.id}
-          title={currentNote.title}
-          content={currentNote.content}
+          title={decryptData(currentNote.title, import.meta.env.VITE_AES_ENCRYPTION_KEY)}
+          content={decryptData(currentNote.content, import.meta.env.VITE_AES_ENCRYPTION_KEY)}
           userId={userId}
           onSave={() => fetchNotes(userId)}
         />

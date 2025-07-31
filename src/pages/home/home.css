@@ -2,17 +2,103 @@
     height: 100vh;
     width: 100vw;
     display: flex;
-    background-color: cadetblue;
+    background: linear-gradient(135deg, #667eea, #764ba2);;
+    display: flex;
+    flex-direction: column;
 }
 
 .add-note-button {
   padding: 10px 20px;
   margin-bottom: 20px;
-  background-color: #4a4a4a;
+  background-color: black;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 20%;
 }
+
+.notes-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notes{
+  width: 80%;
+}
+
+.note-option-cont{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.sort-select {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 50%;
+  /* appearance: none; */
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sort-select:hover {
+  background-color: #3a3a3a;
+}
+
+.sort-cont{
+  display: flex;
+  width: 20%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-input {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 50%;
+}
+
+.search-button:hover {
+  background-color: #3a3a3a;
+}
+

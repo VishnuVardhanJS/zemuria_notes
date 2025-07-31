@@ -3,10 +3,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: grey;
-  width: 100vw;
+  background-color: white;
+  width: 100%;
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .logout-button {

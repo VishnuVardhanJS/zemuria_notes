@@ -18,7 +18,7 @@ function Header() {
     const user = JSON.parse(localStorage.getItem('user'))
     return (
         <div className="header-container">
-            <h1>Hi! {user.displayName}</h1>
+            <h1>{user.displayName}'s Notes</h1>
             <button onClick={handleLogout} className='logout-button'>Logout</button>
         </div>
     )
